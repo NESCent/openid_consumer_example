@@ -11,6 +11,7 @@ class ConsumerController < ApplicationController
 
   def index
     # render an openid form
+    @providers = {"Google" => "https://www.google.com/accounts/o8/id" ,"Yahoo" => "http://yahoo.com"}
   end
 
   def start
@@ -30,14 +31,18 @@ class ConsumerController < ApplicationController
     # Adding ax for email
     if params[:use_ax]
       axreq = OpenID::AX::FetchRequest.new
-      attribute = OpenID::AX::AttrInfo.new("http://schema.openid.net/contact/email", "Email", true)
-      axreq.add(attribute)
-      attribute = OpenID::AX::AttrInfo.new("http://schema.openid.net/contact/first", "FirstName", true)
-      axreq.add(attribute)
-      attribute = OpenID::AX::AttrInfo.new("http://schema.openid.net/contact/last", "LastName", true)
-      axreq.add(attribute)
-      oidreq.add_extension(axreq)
-      oidreq.return_to_args['did_ax'] = 'y'
+        # these work for google
+		attribute = OpenID::AX::AttrInfo.new("http://axschema.org/contact/email", "email", true);
+		axreq.add(attribute)
+		attribute = OpenID::AX::AttrInfo.new("http://axschema.org/namePerson/first", "firstName", true);
+		axreq.add(attribute)
+		attribute = OpenID::AX::AttrInfo.new("http://axschema.org/namePerson/last", "lastName", true);
+	    axreq.add(attribute)
+	    # this works for yahoo
+	    attribute = OpenID::AX::AttrInfo.new("http://axschema.org/namePerson", "fullName", true);
+	    axreq.add(attribute)
+        oidreq.add_extension(axreq)
+        oidreq.return_to_args['did_ax'] = 'y'
     end
     
     if params[:use_sreg]

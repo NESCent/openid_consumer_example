@@ -70,18 +70,18 @@
       <%= flash[:pape_results] %>
       </div>
     <% end %>
+    <%= form_tag({:action => 'start'}, :method => 'get') do %>
     <div id="verify-form">
-      <form method="get" accept-charset="UTF-8" 
-            action='<%= url_for :action => 'start' %>'>
-        Identifier:
-        <input type="text" class="openid" name="openid_identifier" size="60" value="https://www.google.com/accounts/o8/id"/>
-        <input type="submit" value="Verify" /><br />
-        <input type="checkbox" name="use_ax" id="use_ax" /><label for="use_ax">Use Attribute Exchange (e.g. Fetch Email Address)</label><br/>
-        <input type="checkbox" name="immediate" id="immediate" /><label for="immediate">Use immediate mode</label><br/>
-        <input type="checkbox" name="use_sreg" id="use_sreg" /><label for="use_sreg">Request registration data</label><br/>
-        <input type="checkbox" name="use_pape" id="use_pape" /><label for="use_pape">Request phishing-resistent auth policy (PAPE)</label><br/>
-        <input type="checkbox" name="force_post" id="force_post" /><label for="force_post">Force the transaction to use POST by adding 2K of extra data</label>
-      </form>
+    
+        <%= label("openid_identifier", "Provider") %> 
+        <%= select_tag("openid_identifier", options_for_select(@providers)) %>
+        <%= submit_tag("Verify") %><br/>
+        <%= check_box_tag("use_ax") %><%= label_tag("use_ax","Use Attribute Exchange (e.g. Fetch Email Address)") %><br/>
+        <%= check_box_tag("immediate") %><%= label_tag("immediate", "Use immediate mode") %><br>
+        <%= check_box_tag("use_sreg") %><%= label_tag("use_sreg", "Request registration data") %><br>
+        <%= check_box_tag("use_pape") %><%= label_tag("use_pape", "Request phishing-resistent auth policy (PAPE)") %><br>
+        <%= check_box_tag("force_post") %><%= label_tag("force_post", "Force the transaction to use POST by adding 2K of extra data") %><br>
     </div>
+	<% end %>
   </body>
 </html>
