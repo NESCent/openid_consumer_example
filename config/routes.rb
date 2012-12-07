@@ -1,7 +1,11 @@
 SimpleCms::Application.routes.draw do
-  root :to => "demo#index"
+
+  # from ruby-openid
+  root :to => "login#index"
+
+#   root :to => "demo#index"
   
-  match 'admin', :to => 'access#menu'
+#   match 'admin', :to => 'access#menu'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
