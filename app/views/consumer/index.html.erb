@@ -74,7 +74,7 @@
       <form method="get" accept-charset="UTF-8" 
             action='<%= url_for :action => 'start' %>'>
         Identifier:
-        <input type="text" class="openid" name="openid_identifier" value="https://www.google.com/accounts/o8/id"/>
+        <input type="text" class="openid" name="openid_identifier" size="60" value="https://www.google.com/accounts/o8/id"/>
         <input type="submit" value="Verify" /><br />
         <input type="checkbox" name="use_ax" id="use_ax" /><label for="use_ax">Use Attribute Exchange (e.g. Fetch Email Address)</label><br/>
         <input type="checkbox" name="immediate" id="immediate" /><label for="immediate">Use immediate mode</label><br/>

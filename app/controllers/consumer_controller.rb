@@ -92,7 +92,7 @@ class ConsumerController < ApplicationController
 	  if params[:did_ax]
 	  	ax_resp = OpenID::AX::FetchResponse.from_success_response(oidresp)
 	  	ax_message = "Attribute Exchange was requested"
-	  	if ax_resp.data.empty?
+	  	if ax_resp == nil || ax_resp.data.empty?
 	  		ax_message << ", but none was returned."
 	  	else
 	  		ax_resp.data.each {|k,v|
