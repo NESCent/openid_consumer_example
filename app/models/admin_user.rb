@@ -37,6 +37,8 @@ class AdminUser < ActiveRecord::Base
   after_save :clear_password
   
   scope :named, lambda {|first,last| where(:first_name => first, :last_name => last)}
+  scope :sorted, :order => "last_name ASC, first_name ASC"
+
   attr_protected :hashed_password, :salt
   
   def self.make_salt(username="")
@@ -58,6 +60,11 @@ class AdminUser < ActiveRecord::Base
 	return false if hashed_password != user.hashed_password
 	return user
   end
+  
+  def name
+  	first_name + ' ' + last_name
+  end
+  
   
   private #everything below here callable only by class
   
