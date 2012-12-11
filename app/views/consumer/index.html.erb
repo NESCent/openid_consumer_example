@@ -62,7 +62,7 @@
     <% end %>
     <% if flash[:sreg_results] %>
       <div class='alert'>
-      <%= flash[:sreg_results] %>
+      <%= raw(flash[:sreg_results]) %>
       </div>
     <% end %>
     <% if flash[:pape_results] %>
@@ -70,11 +70,14 @@
       <%= flash[:pape_results] %>
       </div>
     <% end %>
+    <%= javascript_tag("function identifierChanged() {$(openid_identifier)[0].value = $(openid_identifier_select).find(\":selected\")[0].value; return true;}") %>    
+    
     <%= form_tag({:action => 'start'}, :method => 'get') do %>
     <div id="verify-form">
     
         <%= label("openid_identifier", "Provider") %> 
-        <%= select_tag("openid_identifier", options_for_select(@providers)) %>
+        <%= select_tag("openid_identifier_select", options_for_select(@providers), :onchange => 'identifierChanged()') %>
+        <%= url_field_tag("openid_identifier", @providers["Google"], :size => 50) %>
         <%= submit_tag("Verify") %><br/>
         <%= check_box_tag("use_ax") %><%= label_tag("use_ax","Use Attribute Exchange (e.g. Fetch Email Address)") %><br/>
         <%= check_box_tag("immediate") %><%= label_tag("immediate", "Use immediate mode") %><br>

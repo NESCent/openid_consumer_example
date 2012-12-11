@@ -11,24 +11,27 @@ class ConsumerController < ApplicationController
 
   def index
     # render an openid form
-    @providers = {"Google" => "https://www.google.com/accounts/o8/id" ,"Yahoo" => "http://yahoo.com"}
+    @providers = {"Google" => "https://www.google.com/accounts/o8/id" ,"Yahoo" => "https://yahoo.com", "Other" => "Please Enter your OpenID Identifier"}
   end
 
   def start
     begin
+      # The URI of the user's OpenID
       identifier = params[:openid_identifier]
       if identifier.nil?
         flash[:error] = "Enter an OpenID identifier"
         redirect_to :action => 'index'
         return
       end
+      # Create an OpenID Consumer Request and discover
       oidreq = consumer.begin(identifier)
     rescue OpenID::OpenIDError => e
       flash[:error] = "Discovery failed for #{identifier}: #{e}"
       redirect_to :action => 'index'
       return
     end
-    # Adding ax for email
+    # Request Attributes for name and email address
+    # if Attribute Exchange (ax) selected
     if params[:use_ax]
       axreq = OpenID::AX::FetchRequest.new
         # these work for google
@@ -45,6 +48,7 @@ class ConsumerController < ApplicationController
         oidreq.return_to_args['did_ax'] = 'y'
     end
     
+    # Request Simple Registration data if selected
     if params[:use_sreg]
       sregreq = OpenID::SReg::Request.new
       # required fields
@@ -54,21 +58,25 @@ class ConsumerController < ApplicationController
       oidreq.add_extension(sregreq)
       oidreq.return_to_args['did_sreg'] = 'y'
     end
-    if params[:use_pape]
+    # Provider Authentication Policy Extension
+    # Used here to limit the maximum age of the session
+	if params[:use_pape]
       papereq = OpenID::PAPE::Request.new
       papereq.add_policy_uri(OpenID::PAPE::AUTH_PHISHING_RESISTANT)
       papereq.max_auth_age = 2*60*60
       oidreq.add_extension(papereq)
       oidreq.return_to_args['did_pape'] = 'y'
     end
+    # Force POST by increasing the request size
     if params[:force_post]
       oidreq.return_to_args['force_post']='x'*2048
     end
+    # URL to return to: this controller's complete action
     return_to = url_for :action => 'complete', :only_path => false
+    # Authentication realm: The URL of this controller's index method
     realm = url_for :action => 'index', :id => nil, :only_path => false
-    
-    puts "OIDreq: " + oidreq.inspect
-    
+
+	# Send the request
     if oidreq.send_redirect?(realm, return_to, params[:immediate])
       redirect_to oidreq.redirect_url(realm, return_to, params[:immediate])
     else
@@ -77,11 +85,12 @@ class ConsumerController < ApplicationController
   end
 
   def complete
+  	# Receives request after Provider authenticates (or fails)
     # FIXME - url_for some action is not necessarily the current URL.
     current_url = url_for(:action => 'complete', :only_path => false)
     parameters = params.reject{|k,v|request.path_parameters[k]}.reject{|k,v| k == 'action' || k == 'controller'}
+    # Populate a response object
     oidresp = consumer.complete(parameters, current_url)
-    puts "oidresp: " + oidresp.inspect
     case oidresp.status
     when OpenID::Consumer::FAILURE
       if oidresp.display_identifier
@@ -91,7 +100,6 @@ class ConsumerController < ApplicationController
         flash[:error] = "Verification failed: #{oidresp.message}"
       end
     when OpenID::Consumer::SUCCESS
-    puts "params: " + params.inspect
       flash[:success] = ("Verification of #{oidresp.display_identifier}"\
                          " succeeded.")
 	  if params[:did_ax]
