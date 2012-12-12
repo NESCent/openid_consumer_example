@@ -1,8 +1,8 @@
 # Be sure to restart your server when you modify this file.
 
-SimpleCms::Application.config.session_store :cookie_store, key: '_simple_cms_session'
+OpenIDConsumer::Application.config.session_store :cookie_store, key: '_open_id_consumer'
 
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information
 # (create the session table with "rails generate session_migration")
-# SimpleCms::Application.config.session_store :active_record_store
+# OpenIDConsumer::Application.config.session_store :active_record_store

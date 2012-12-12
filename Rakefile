@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-SimpleCms::Application.load_tasks
+OpenIDConsumer::Application.load_tasks

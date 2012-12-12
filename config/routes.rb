@@ -1,4 +1,4 @@
-SimpleCms::Application.routes.draw do
+OpenIDConsumer::Application.routes.draw do
 
   # from ruby-openid
   root :to => "login#index"
