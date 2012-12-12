@@ -7,9 +7,7 @@ email address from Google and Yahoo!
 
 == Getting Started
 
-After checking out, start the server with
-
-	rails server
+After checking out, start the server with <tt>rails server</tt>
 	
 Direct your web browser to http://localhost:3000/consumer.  You can use Google or Yahoo
 OpenIDs by selecting them, or enter your own OpenID URL.
