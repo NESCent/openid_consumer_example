@@ -1,6 +1,0 @@
-<% good_string = '<strong>hello</strong> please visit <a href="http://www.google.com">google</a>' %>
-
-
-<%= strip_tags(good_string) %>
-
-<%= sanitize(good_string, :tags => ['strong']) %>
