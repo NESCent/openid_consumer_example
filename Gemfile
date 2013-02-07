@@ -37,5 +37,6 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'debugger'
 
+ gem 'ruby-openid'
 # autolink is gone as of rails 3.1
 gem 'rinku', '~> 1.7.2', :require => 'rails_rinku'
