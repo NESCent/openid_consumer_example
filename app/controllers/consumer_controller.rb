@@ -35,14 +35,14 @@ class ConsumerController < ApplicationController
     if params[:use_ax]
       axreq = OpenID::AX::FetchRequest.new
         # these work for google
-		attribute = OpenID::AX::AttrInfo.new("http://axschema.org/contact/email", "email", true);
+		attribute = OpenID::AX::AttrInfo.new("http://openid.net/schema/contact/email", "email", true);
 		axreq.add(attribute)
-		attribute = OpenID::AX::AttrInfo.new("http://axschema.org/namePerson/first", "firstName", true);
+		attribute = OpenID::AX::AttrInfo.new("http://openid.net/schema/namePerson/first", "firstName", true);
 		axreq.add(attribute)
-		attribute = OpenID::AX::AttrInfo.new("http://axschema.org/namePerson/last", "lastName", true);
+		attribute = OpenID::AX::AttrInfo.new("http://openid.net/schema/namePerson/last", "lastName", true);
 	    axreq.add(attribute)
 	    # this works for yahoo
-	    attribute = OpenID::AX::AttrInfo.new("http://axschema.org/namePerson", "fullName", true);
+	    attribute = OpenID::AX::AttrInfo.new("http://openid.net/schema/namePerson", "fullName", true);
 	    axreq.add(attribute)
         oidreq.add_extension(axreq)
         oidreq.return_to_args['did_ax'] = 'y'
